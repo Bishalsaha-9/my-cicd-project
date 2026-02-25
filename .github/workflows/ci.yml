@@ -1,0 +1,30 @@
+# .github/workflows/ci.yml
+
+name: CI Pipeline          # Name shown on GitHub Actions tab
+
+on:                        # WHEN to run this pipeline
+  push:                    # Run when code is pushed
+    branches: [ main ]     # Only on the main branch
+  pull_request:            # Also run on pull requests
+    branches: [ main ]
+
+jobs:                      # What to do (list of jobs)
+
+  test:                    # Job name (you can name it anything)
+    runs-on: ubuntu-latest # Run on a fresh Ubuntu Linux VM
+
+    steps:                 # Steps inside the job
+
+      - name: Checkout code          # Step 1
+        uses: actions/checkout@v4    # Download our code onto the VM
+
+      - name: Set up Python          # Step 2
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'     # Install Python 3.11
+
+      - name: Install dependencies   # Step 3
+        run: pip install -r requirements.txt   # Install pytest
+
+      - name: Run tests              # Step 4
+        run: pytest test_app.py -v   # Run our tests!
